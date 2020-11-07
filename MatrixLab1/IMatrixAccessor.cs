@@ -6,7 +6,9 @@ namespace MatrixLab1
 {
     interface IMatrixAccessor
     {
-        int Size { get; }
+        int Rows { get; }
+
+        int Columns { get; }
 
         double this[int row, int col]
         {

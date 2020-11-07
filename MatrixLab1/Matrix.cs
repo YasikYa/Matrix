@@ -8,32 +8,35 @@ namespace MatrixLab1
     class Matrix
     {
         public static double Min { get; set; }
-
         public static double Max { get; set; }
 
-        private MatrixAccessor _accessor;
+        private readonly MatrixAccessor _accessor;
 
-        public double Det => CalcDeterminator(_accessor);
+        public double Det => Rows == Columns ? CalcDeterminator(_accessor) : throw new Exception("Determinator can be calculated only for the NxN matrix");
+        public int Rows => _accessor.Rows;
+        public int Columns => _accessor.Columns;
 
-        public Matrix()
+        public Matrix(int rowCount, int colCount)
         {
-            //var rnd = new Random();
-            //_matrix = new double[3, 3];
-            //for (int row = 0; row < 3; row++)
-            //{
-            //    for (int col = 0; col < 3; col++)
-            //    {
-            //        var value = Min + (rnd.NextDouble() * (Max - Min));
-            //        _matrix[row, col] = Math.Round(value, 2);
-            //    }
-            //}
-            _accessor = new MatrixAccessor(new double[,] { { 5, -3, 2 }, { 1, 7, 6 }, { -4, 2, -6 } });
+            var rnd = new Random();
+            var matrix = new double[rowCount, colCount];
+            for (int row = 0; row < rowCount; row++)
+            {
+                for (int col = 0; col < colCount; col++)
+                {
+                    var value = Min + (rnd.NextDouble() * (Max - Min));
+                    matrix[row, col] = Math.Round(value, 2);
+                }
+            }
+            _accessor = new MatrixAccessor(matrix);
         }
 
         public Matrix(double[,] matrix)
         {
             _accessor = new MatrixAccessor(matrix);
         }
+
+        public Matrix(MatrixAccessor accessor) => _accessor = accessor;
 
         public void Add(Matrix addFrom)
         {
@@ -48,18 +51,21 @@ namespace MatrixLab1
 
         public Matrix MultiplyBy(Matrix multiplier)
         {
-            var resultMatrix = new double[3, 3];
-            for (int row = 0; row < _accessor.Size; row++)
+            if (_accessor.Columns != multiplier.Rows)
+                throw new Exception("Cannot multiply matrix. Columns count differs from rows count between multipliers");
+
+            var resultMatrix = new double[_accessor.Rows, multiplier.Columns];
+            for (int row = 0; row < _accessor.Rows; row++)
             {
-                for (int col = 0; col < _accessor.Size; col++)
+                for (int col = 0; col < multiplier.Columns; col++)
                 {
                     double aggregate = 0;
-                    for (int i = 0; i < _accessor.Size; i++)
+                    for (int i = 0; i < _accessor.Columns; i++)
                     {
                         aggregate += _accessor[row, i] * multiplier[i, col];
                     }
 
-                    resultMatrix[row, col] = aggregate;
+                    resultMatrix[row, col] = Math.Round(aggregate, 2);
                 }
             }
 
@@ -68,11 +74,11 @@ namespace MatrixLab1
 
         public void MultiplyBy(double value)
         {
-            for (int row = 0; row < 3; row++)
+            for (int row = 0; row < Rows; row++)
             {
-                for (int col = 0; col < 3; col++)
+                for (int col = 0; col < Columns; col++)
                 {
-                    _accessor[row, col] = _accessor[row, col] * value;
+                    _accessor[row, col] = Math.Round(_accessor[row, col] * value, 2);
                 }
             }
         }
@@ -84,15 +90,15 @@ namespace MatrixLab1
 
         private double CalcDeterminator(IMatrixAccessor accessor)
         {
-            if (accessor.Size == 2)
+            if (accessor.Rows == 2)
             {
                 return accessor[0, 0] * accessor[1, 1] - accessor[1, 0] * accessor[0, 1];
             }
 
             double determinator = 0;
-            for (int i = 0; i < accessor.Size; i++)
+            for (int i = 0; i < accessor.Columns; i++)
             {
-                double minorDeterminator = IsPositiveSign(accessor.Size, i)
+                double minorDeterminator = IsPositiveSign(accessor.Rows, i)
                     ? CalcDeterminator(new DeterminatorAccessor(i, accessor))
                     : CalcDeterminator(new DeterminatorAccessor(i, accessor)) * -1;
 
@@ -102,18 +108,18 @@ namespace MatrixLab1
             return determinator;
         }
 
-        private bool IsPositiveSign(int size, int col)
+        private bool IsPositiveSign(int decomposedSize, int col)
         {
-            var sizeDiff = _accessor.Size - size;
-            var stepsRequired = sizeDiff * 2 + col;
-            return (stepsRequired % 2) == 0;
+            var sizeDiff = _accessor.Rows - decomposedSize;
+            var angleLength = sizeDiff * 2 + col;
+            return (angleLength % 2) == 0;
         }
 
         public void Display()
         {
-            for (int row = 0; row < 3; row++)
+            for (int row = 0; row < Rows; row++)
             {
-                for (int col = 0; col < 3; col++)
+                for (int col = 0; col < Columns; col++)
                 {
                     Console.Write($"{_accessor[row, col]}\t");
                 }

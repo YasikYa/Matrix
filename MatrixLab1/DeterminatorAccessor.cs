@@ -6,11 +6,16 @@ namespace MatrixLab1
 {
     class DeterminatorAccessor : IMatrixAccessor
     {
-        public int Size => _mainAccessor.Size - 1;
         private IMatrixAccessor _mainAccessor;
-        private int _col;
+        private int _decomposingCol;
 
-        public DeterminatorAccessor(int col, IMatrixAccessor mainAccessor) => (_col, _mainAccessor) = (col, mainAccessor);
+        // Decrease virtual matrix size by 1 on each decompose step
+        public int Rows => _mainAccessor.Rows - 1;
+
+        // Determinator can be calculated only for NxN matrix, rows == columns here.
+        public int Columns => Rows;
+
+        public DeterminatorAccessor(int decomposingCol, IMatrixAccessor mainAccessor) => (_decomposingCol, _mainAccessor) = (decomposingCol, mainAccessor);
 
         public double this[int row, int col]
         {
@@ -30,7 +35,7 @@ namespace MatrixLab1
         private (int row, int col) TransformIndexes(int row, int col)
         {
             var rowIndex = row + 1;
-            var colIndex = col >= _col ? col + 1 : col;
+            var colIndex = col >= _decomposingCol ? col + 1 : col;
 
             return (rowIndex, colIndex);
         }

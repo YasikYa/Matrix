@@ -9,7 +9,9 @@ namespace MatrixLab1
         private double[,] _matrix;
         private bool _transposed = false;
 
-        public int Size => _matrix.GetLength(0);
+        public int Rows => !_transposed ? _matrix.GetLength(0) : _matrix.GetLength(1);
+
+        public int Columns => !_transposed ? _matrix.GetLength(1) : _matrix.GetLength(0);
 
         public MatrixAccessor(double[,] matrix) => _matrix = matrix;
 
