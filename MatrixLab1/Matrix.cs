@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MatrixLab1
 {
-    class Matrix
+    public class Matrix
     {
         public static double Min { get; set; }
         public static double Max { get; set; }
@@ -40,9 +40,12 @@ namespace MatrixLab1
 
         public void Add(Matrix addFrom)
         {
-            for (int row = 0; row < 3; row++)
+            if (Rows != addFrom.Rows || Columns != addFrom.Columns)
+                throw new Exception("Can not add matrix of different size");
+
+            for (int row = 0; row < Rows; row++)
             {
-                for (int col = 0; col < 3; col++)
+                for (int col = 0; col < Columns; col++)
                 {
                     _accessor[row, col] = _accessor[row, col] + addFrom[row, col];
                 }

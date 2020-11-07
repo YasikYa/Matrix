@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MatrixLab1
 {
-    class MatrixAccessor : IMatrixAccessor
+    public class MatrixAccessor : IMatrixAccessor
     {
         private double[,] _matrix;
         private bool _transposed = false;
