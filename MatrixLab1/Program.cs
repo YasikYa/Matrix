@@ -7,8 +7,6 @@ namespace MatrixLab1
         static void Main(string[] args)
         {
             var arr = new double[,] { { 5, -3, 2 }, { 1, 7, 6 }, { -4, 2, -6 } };
-            Matrix.Min = -5;
-            Matrix.Max = 5;
 
             var matrix = new Matrix(arr);
             matrix.Display();
@@ -21,7 +19,7 @@ namespace MatrixLab1
             Console.WriteLine("Determinator");
             Console.WriteLine(matrix.Det);
             Console.WriteLine("Multiplier");
-            var multiplier = new Matrix(3, 2);
+            var multiplier = new Matrix();
             multiplier.Display();
             Console.WriteLine("Mult result");
             var result = matrix.MultiplyBy(multiplier);
