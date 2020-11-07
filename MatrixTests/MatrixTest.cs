@@ -7,46 +7,20 @@ namespace MatrixTests
     [TestClass]
     public class MatrixTest
     {
-        private readonly double[,] _squareArray = new double[,] { { 5, -3, 2 }, { 1, 7, 6 }, { -4, 2, -6 } };
-        private readonly double[,] _array = new double[,] { { 2, 5 }, { -1, 3 }, { -4, 4 } };
+        private readonly double[,] _array = new double[,] { { 5, -3, 2 }, { 1, 7, 6 }, { -4, 2, -6 } };
         private double[,] Array => (double[,])_array.Clone();
-        private double[,] SquareArray => (double[,])_squareArray.Clone();
-
-        private Matrix _squareMatrix;
         private Matrix _matrix;
 
         [TestInitialize]
         public void Init()
         {
-            _squareMatrix = new Matrix(SquareArray);
             _matrix = new Matrix(Array);
         }
 
         [TestCleanup]
         public void Cleanup()
         {
-            _squareMatrix = null;
             _matrix = null;
-        }
-
-        [TestMethod]
-        public void MatrixShouldHasCorrectSize()
-        {
-            var dynamicMatrix = new Matrix(5, 2);
-
-            Assert.AreEqual(3, _squareMatrix.Rows, "Array initialized matrix has incorrect rows count");
-            Assert.AreEqual(3, _squareMatrix.Columns, "Array initialized matrix has incorrect columns count");
-            Assert.AreEqual(5, dynamicMatrix.Rows, "Dynamic initialized matrix has incorrect rows count");
-            Assert.AreEqual(2, dynamicMatrix.Columns, "Dynamic initialized matrix has incorrect columns count");
-        }
-
-        [TestMethod]
-        public void TransposedMatrixShouldHasCorrectSize()
-        {
-            _matrix.Transponse();
-
-            Assert.AreEqual(2, _matrix.Rows, "Unexpected rows count in transposed matrix");
-            Assert.AreEqual(3, _matrix.Columns, "Unexpected columns count in transposed matrix");
         }
 
         [TestMethod]
@@ -75,62 +49,33 @@ namespace MatrixTests
         }
 
         [TestMethod]
-        public void MatrixMultShouldResultInCorrectSize()
-        {
-            var result = _matrix.MultiplyBy(new Matrix(2, 3));
-
-            Assert.AreEqual(3, result.Rows, "Mult result matrix has incorrect rows count");
-            Assert.AreEqual(3, result.Columns, "Mult result matrix has incorrect columns count");
-        }
-
-        [TestMethod]
         public void MatrixCanMultiplyByMatrix()
         {
-            var multiplierArray = new double[,] { { -4, 1, 5 }, { 3, 2, -3 } };
-            var result = new Matrix(multiplierArray).MultiplyBy(_matrix);
+            var result = new Matrix(Array).MultiplyBy(_matrix);
 
-            Assert.AreEqual(-29, result[0, 0]);
-            Assert.AreEqual(3, result[0, 1]);
-            Assert.AreEqual(16, result[1, 0]);
-            Assert.AreEqual(9, result[1, 1]);
+            Assert.AreEqual(14, result[0, 0]);
+            Assert.AreEqual(-32, result[0, 1]);
+            Assert.AreEqual(-20, result[0, 2]);
+            Assert.AreEqual(-12, result[1, 0]);
+            Assert.AreEqual(58, result[1, 1]);
+            Assert.AreEqual(8, result[1, 2]);
+            Assert.AreEqual(6, result[2, 0]);
+            Assert.AreEqual(14, result[2, 1]);
+            Assert.AreEqual(40, result[2, 2]);
         }
 
         [TestMethod]
         public void MatrixCanCalcDeterminator()
         {
-            Assert.AreEqual(-156, _squareMatrix.Det);
+            Assert.AreEqual(-156, _matrix.Det);
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void CanNotCalcDeterminatorOnNotSquareMatrix()
-        {
-            _ = _matrix.Det;
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void CanNotAddMatrixOfDifferentSize()
-        {
-            _matrix.Add(_squareMatrix);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void CanNotMultInappropriateMatrix()
-        {
-            _ = _matrix.MultiplyBy(_squareMatrix);
-        }
-
         private void VerifyMatrixValues(Func<int, int, double> expect)
         {
-            for (int row = 0; row < _matrix.Rows; row++)
+            for (int row = 0; row < 3; row++)
             {
-                for (int col = 0; col < _matrix.Columns; col++)
+                for (int col = 0; col < 3; col++)
                 {
-                    var actual = _matrix[row, col];
-                    var expected = expect(row, col);
-                    Assert.AreEqual(expected, actual, $"Matrix has incorrect value at index [{row}, {col}]");
+                    Assert.AreEqual(expect(row, col), _matrix[row, col], $"Matrix has incorrect value at index [{row}, {col}]");
                 }
             }
         }

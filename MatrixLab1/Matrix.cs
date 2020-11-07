@@ -30,6 +30,9 @@ namespace MatrixLab1
 
         public Matrix(double[,] matrix)
         {
+            if (matrix.GetLength(0) != matrix.GetLength(1) && matrix.GetLength(0) != 3)
+                throw new Exception("Invalid matrix size");
+
             _matrix = matrix;
         }
 
