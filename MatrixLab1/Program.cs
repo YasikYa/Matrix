@@ -6,26 +6,29 @@ namespace MatrixLab1
     {
         static void Main(string[] args)
         {
-            Matrix.Min = -10;
-            Matrix.Max = 10;
+            var arr = new double[,] { { 5, -3, 2 }, { 1, 7, 6 }, { -4, 2, -6 } };
+            Matrix.Min = -5;
+            Matrix.Max = 5;
 
-            var matrix = new Matrix();
+            var matrix = new Matrix(arr);
             matrix.Display();
-
-            Console.WriteLine();
-            Console.WriteLine(matrix.Det);
-
             matrix.Transponse();
-
-            Console.WriteLine();
+            Console.WriteLine("Transposed");
             matrix.Display();
-
-            Console.WriteLine();
+            Console.WriteLine("Transposed back");
+            matrix.Transponse();
+            matrix.Display();
+            Console.WriteLine("Determinator");
             Console.WriteLine(matrix.Det);
-
-            var mult = matrix.MultiplyBy(new Matrix());
-            mult.Display();
-
+            Console.WriteLine("Multiplier");
+            var multiplier = new Matrix(3, 2);
+            multiplier.Display();
+            Console.WriteLine("Mult result");
+            var result = matrix.MultiplyBy(multiplier);
+            result.Display();
+            Console.WriteLine("Mult result by 2");
+            result.MultiplyBy(2);
+            result.Display();
             Console.ReadLine();
         }
     }
