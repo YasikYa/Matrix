@@ -10,34 +10,26 @@ namespace MatrixLab1
         private int _decomposingCol;
 
         // Decrease virtual matrix size by 1 on each decompose step
-        public int Rows => _mainAccessor.Rows - 1;
+        public int Rows => throw new NotImplementedException();
 
         // Determinator can be calculated only for NxN matrix, rows == columns here.
-        public int Columns => Rows;
+        public int Columns => throw new NotImplementedException();
 
-        public DeterminatorAccessor(int decomposingCol, IMatrixAccessor mainAccessor) => (_decomposingCol, _mainAccessor) = (decomposingCol, mainAccessor);
+        public DeterminatorAccessor(int decomposingCol, IMatrixAccessor mainAccessor) => throw new NotImplementedException();
 
         public double this[int row, int col]
         {
             get
             {
-                var transformedIndexes = TransformIndexes(row, col);
-                return _mainAccessor[transformedIndexes.row, transformedIndexes.col];
+                throw new NotImplementedException();
             }
 
             set
             {
-                var transformedIndexes = TransformIndexes(row, col);
-                _mainAccessor[transformedIndexes.row, transformedIndexes.col] = value;
+                throw new NotImplementedException();
             }
         }
 
-        private (int row, int col) TransformIndexes(int row, int col)
-        {
-            var rowIndex = row + 1;
-            var colIndex = col >= _decomposingCol ? col + 1 : col;
-
-            return (rowIndex, colIndex);
-        }
+        private (int row, int col) TransformIndexes(int row, int col) => throw new NotImplementedException();
     }
 }

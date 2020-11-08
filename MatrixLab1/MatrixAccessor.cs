@@ -9,29 +9,27 @@ namespace MatrixLab1
         private double[,] _matrix;
         private bool _transposed = false;
 
-        public int Rows => !_transposed ? _matrix.GetLength(0) : _matrix.GetLength(1);
+        public int Rows => throw new NotImplementedException();
 
-        public int Columns => !_transposed ? _matrix.GetLength(1) : _matrix.GetLength(0);
+        public int Columns => throw new NotImplementedException();
 
-        public MatrixAccessor(double[,] matrix) => _matrix = matrix;
+        public MatrixAccessor(double[,] matrix) => throw new NotImplementedException();
 
-        public void Transpose() => _transposed = !_transposed;
+        public void Transpose() => throw new NotImplementedException();
 
         public double this[int row, int col]
         { 
             get
             {
-                var transformedIndexes = TransformIndexes(row, col);
-                return _matrix[transformedIndexes.row, transformedIndexes.col];
+                throw new NotImplementedException();
             }
 
             set
             {
-                var transformedIndexes = TransformIndexes(row, col);
-                _matrix[transformedIndexes.row, transformedIndexes.col] = value;
+                throw new NotImplementedException();
             }
         }
 
-        private (int row, int col) TransformIndexes(int row, int col) => _transposed ? (col, row) : (row, col);
+        private (int row, int col) TransformIndexes(int row, int col) => throw new NotImplementedException();
     }
 }
